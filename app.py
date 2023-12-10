@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import mysql.connector
 
 app = Flask(__name__)
 
+
+app.secret_key = 'your_secret_key'
 # Replace these with your MySQL connection details
 DB_CONFIG = {
     'host': 'localhost',
@@ -11,13 +13,34 @@ DB_CONFIG = {
     'database': 'job_portal',
 }
 
-@app.route('/')
-def index():
-    with mysql.connector.connect(**DB_CONFIG) as connection:
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM jobs')
-        job_listings = cursor.fetchall()
-    return render_template('index.html', job_listings=job_listings)
+USERS = {
+    'admin': {'password': 'admin_password', 'role': 'admin'},
+    'employer': {'password': 'employer_password', 'role': 'employer'},
+    'candidate': {'password': 'candidate_password', 'role': 'candidate'},
+}
+
+
+
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Check if the user exists and the password is correct
+        if username in USERS and USERS[username]['password'] == password:
+            session['username'] = username
+            session['role'] = USERS[username]['role']
+
+            if USERS[username]['role'] == 'employer':
+                return redirect(url_for('post_job'))
+            else:
+                return redirect(url_for('all_jobs'))
+        else:
+            error = 'Invalid credentials. Please try again.'
+            return render_template('login.html', error=error)
+
+    return render_template('login.html')
 
 @app.route('/post_job', methods=['GET', 'POST'])
 def post_job():
@@ -48,6 +71,8 @@ def job_details(job_id):
 
 @app.route('/all_jobs')
 def all_jobs():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     with mysql.connector.connect(**DB_CONFIG) as connection:
         cursor = connection.cursor(dictionary=True)
         cursor.execute('SELECT * FROM jobs')

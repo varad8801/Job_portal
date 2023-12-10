@@ -9,6 +9,7 @@
 </head>
 <body class="container mt-5">
     <h1 class="mb-4">Post a Job</h1>
+    {% if 'username' in session and session['role'] == 'employer' %}
     <form action="{{ url_for('post_job') }}" method="post">
         <div class="form-group">
             <label for="title">Job Title:</label>
@@ -37,7 +38,9 @@
 
         <button type="submit" class="btn btn-primary">Post Job</button>
     </form>
-
+    {% else %}
+        <p>Access denied. You do not have permission to post jobs.</p>
+    {% endif %}
 
 
     <br>

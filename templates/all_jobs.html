@@ -21,7 +21,10 @@
             {% endfor %}
         </ul>
         <br>
-        <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Job posting</a>
+
+        {% if 'username' in session and session['role'] == 'employer' %}
+        <a href="{{ url_for('job_posting') }}" class="btn btn-primary">Post a Job</a>
+    {% endif %}
     </div>
 
     <!-- Bootstrap JS and dependencies (optional) -->
