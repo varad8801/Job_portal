@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 
 app.secret_key = 'your_secret_key'
-# Replace these with your MySQL connection details
+
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
@@ -57,7 +57,7 @@ def post_job():
                            (title, category, description, employer, email))
             connection.commit()
         message = 'Job posted successfully!'
-        return redirect(url_for('index'))
+        return redirect(url_for('post_job'))
 
     return render_template('post_job.html')
 

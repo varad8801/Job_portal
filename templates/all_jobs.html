@@ -23,7 +23,7 @@
         <br>
 
         {% if 'username' in session and session['role'] == 'employer' %}
-        <a href="{{ url_for('job_posting') }}" class="btn btn-primary">Post a Job</a>
+        <a href="{{ url_for('post_job') }}" class="btn btn-primary">Post a Job</a>
     {% endif %}
     </div>
 
