@@ -9,6 +9,9 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+{% if 'username' in session  %}
+<a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+
     <div class="container mt-5">
         <h1 class="mb-4">All Jobs</h1>
         <ul class="list-group">
@@ -24,7 +27,13 @@
 
         {% if 'username' in session and session['role'] == 'employer' %}
         <a href="{{ url_for('post_job') }}" class="btn btn-primary">Post a Job</a>
+        {% endif %}
+    {% else %}
+        <p>Access denied. You do not have permission to post jobs.</p>
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
     {% endif %}
+
+
     </div>
 
     <!-- Bootstrap JS and dependencies (optional) -->
