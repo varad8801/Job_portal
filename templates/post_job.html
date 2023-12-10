@@ -10,7 +10,7 @@
 <body class="container mt-5">
 
 
-    {% if 'username' in session and session['role'] == 'employer' %}
+    {% if 'username' in session and (session['role'] == 'employer' or session['role'] == 'admin' )%}
     <h1 class="mb-4">Post a Job</h1>
     <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
     <form action="{{ url_for('post_job') }}" method="post">

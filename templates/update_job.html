@@ -1,0 +1,17 @@
+<!-- update_job.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- head content -->
+</head>
+<body class="container mt-5">
+    <h1 class="mb-4">Update Job</h1>
+
+    <form action="{{ url_for('update_job', job_id=job.id) }}" method="post">
+        <!-- Update job form elements -->
+        <button type="submit" class="btn btn-primary">Update Job</button>
+    </form>
+
+    <!-- Bootstrap JS and dependencies -->
+</body>
+</html>

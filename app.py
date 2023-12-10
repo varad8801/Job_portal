@@ -32,7 +32,7 @@ def login():
             session['username'] = username
             session['role'] = USERS[username]['role']
 
-            if USERS[username]['role'] == 'employer':
+            if USERS[username]['role'] == 'employer' or USERS[username]['role'] == 'admin':
                 return redirect(url_for('post_job'))
             else:
                 return redirect(url_for('all_jobs'))
@@ -83,5 +83,10 @@ def all_jobs():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

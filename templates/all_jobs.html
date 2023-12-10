@@ -10,9 +10,10 @@
 </head>
 <body>
 {% if 'username' in session  %}
-<a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+
 
     <div class="container mt-5">
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
         <h1 class="mb-4">All Jobs</h1>
         <ul class="list-group">
             {% for job in all_jobs %}
@@ -25,7 +26,7 @@
         </ul>
         <br>
 
-        {% if 'username' in session and session['role'] == 'employer' %}
+        {% if 'username' in session and (session['role'] == 'employer' or session['role'] == 'admin' ) %}
         <a href="{{ url_for('post_job') }}" class="btn btn-primary">Post a Job</a>
         {% endif %}
     {% else %}
