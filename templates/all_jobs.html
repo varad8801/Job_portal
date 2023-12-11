@@ -21,12 +21,16 @@
                     <strong>{{ job.title }}</strong> - {{ job.category }}<br>
                     <span>Employer: {{ job.employer }} | Contact: {{ job.email }}</span><br>
                     <a href="{{ url_for('job_details', job_id=job.id) }}" class="btn btn-primary">View Details</a>
+                    {% if 'username' in session and (session['role'] == 'employer' or session['role'] == 'admin' ) %}
+                    <a href="{{ url_for('update_job', job_id=job.id) }}" class="btn btn-warning">Update</a>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
         <br>
 
         {% if 'username' in session and (session['role'] == 'employer' or session['role'] == 'admin' ) %}
+
         <a href="{{ url_for('post_job') }}" class="btn btn-primary">Post a Job</a>
         {% endif %}
     {% else %}
