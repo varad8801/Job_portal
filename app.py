@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session,flash
 import mysql.connector
 
 app = Flask(__name__)
@@ -56,7 +56,7 @@ def post_job():
             cursor.execute('INSERT INTO jobs (title, category, description, employer, email) VALUES (%s, %s, %s, %s, %s)',
                            (title, category, description, employer, email))
             connection.commit()
-        message = 'Job posted successfully!'
+        flash('Job posted successfully!', 'success')
         return redirect(url_for('post_job'))
 
     return render_template('post_job.html')
@@ -99,7 +99,7 @@ def update_job(job_id):
             """
             cursor.execute(update_query, (updated_title, updated_category, updated_description, updated_employer, updated_email, job_id))
             connection.commit()
-
+        flash('Job posted successfully!', 'success')
         return redirect(url_for('all_jobs'))
 
     return render_template('update_job.html', job=job)
@@ -114,6 +114,15 @@ def all_jobs():
         cursor.execute('SELECT * FROM jobs')
         all_jobs = cursor.fetchall()
     return render_template('all_jobs.html', all_jobs=all_jobs)
+
+@app.route('/delete_job/<int:job_id>', methods=['POST'])
+def delete_job(job_id):
+    with mysql.connector.connect(**DB_CONFIG) as connection:
+        cursor = connection.cursor()
+        delete_query = "DELETE FROM jobs WHERE id = %s"
+        cursor.execute(delete_query, (job_id,))
+        connection.commit()
+    return redirect(url_for('all_jobs'))
 
 @app.route('/logout')
 def logout():
